@@ -1,25 +1,23 @@
-// @flow
-
-import TrackSelector from '../components/TrackSelector'
-import NightingaleChart from '../components/NightingaleChart'
-import KeyboardListener from '../components/KeyboardListener'
-import Track from '../components/Track'
-import Wordmark from '../components/Wordmark'
-import LevelThermometer from '../components/LevelThermometer'
+import TrackSelector from './TrackSelector'
+import NightingaleChart from './NightingaleChart'
+import KeyboardListener from './KeyboardListener'
+import Track from './Track'
+import Wordmark from './Wordmark'
+import LevelThermometer from './LevelThermometer'
 import { eligibleTitles, trackIds, milestones, milestoneToPoints } from '../constants'
-import PointSummaries from '../components/PointSummaries'
-import type { Milestone, MilestoneMap, TrackId } from '../constants'
+import PointSummaries from './PointSummaries'
+import { Milestone, MilestoneMap, TrackId } from '../constants'
 import React from 'react'
-import TitleSelector from '../components/TitleSelector'
+import TitleSelector from './TitleSelector'
 
-type SnowflakeAppState = {
+const SnowflakeAppState = {
   milestoneByTrack: MilestoneMap,
-  name: string,
-  title: string,
+  name: '',  // or any default string value
+  title: '',  // or any default string value
   focusedTrackId: TrackId,
 }
 
-const hashToState = (hash: String): ?SnowflakeAppState => {
+const hashToState = (hash) => {
   if (!hash) return null
   const result = defaultState()
   const hashValues = hash.split('#')[1].split(',')
@@ -32,7 +30,7 @@ const hashToState = (hash: String): ?SnowflakeAppState => {
   return result
 }
 
-const coerceMilestone = (value: number): Milestone => {
+const coerceMilestone = (value) => {
   // HACK I know this is goofy but i'm dealing with flow typing
   switch(value) {
     case 0: return 0
@@ -45,7 +43,7 @@ const coerceMilestone = (value: number): Milestone => {
   }
 }
 
-const emptyState = (): SnowflakeAppState => {
+const emptyState = () => {
   return {
     name: '',
     title: '',
@@ -71,7 +69,7 @@ const emptyState = (): SnowflakeAppState => {
   }
 }
 
-const defaultState = (): SnowflakeAppState => {
+const defaultState = () => {
   return {
     name: 'Cersei Lannister',
     title: 'Staff Engineer',
@@ -97,18 +95,18 @@ const defaultState = (): SnowflakeAppState => {
   }
 }
 
-const stateToHash = (state: SnowflakeAppState) => {
+const stateToHash = (state) => {
   if (!state || !state.milestoneByTrack) return null
   const values = trackIds.map(trackId => state.milestoneByTrack[trackId]).concat(encodeURI(state.name), encodeURI(state.title))
   return values.join(',')
 }
 
-type Props = {}
+const Props = {}
 
-class SnowflakeApp extends React.Component<Props, SnowflakeAppState> {
-  constructor(props: Props) {
-    super(props)
-    this.state = emptyState()
+class SnowflakeApp extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = emptyState();
   }
 
   componentDidUpdate() {
@@ -211,7 +209,7 @@ class SnowflakeApp extends React.Component<Props, SnowflakeAppState> {
     )
   }
 
-  handleTrackMilestoneChange(trackId: TrackId, milestone: Milestone) {
+  handleTrackMilestoneChange(trackId, milestone) {
     const milestoneByTrack = this.state.milestoneByTrack
     milestoneByTrack[trackId] = milestone
 
@@ -221,28 +219,28 @@ class SnowflakeApp extends React.Component<Props, SnowflakeAppState> {
     this.setState({ milestoneByTrack, focusedTrackId: trackId, title })
   }
 
-  shiftFocusedTrack(delta: number) {
+  shiftFocusedTrack(delta) {
     let index = trackIds.indexOf(this.state.focusedTrackId)
     index = (index + delta + trackIds.length) % trackIds.length
     const focusedTrackId = trackIds[index]
     this.setState({ focusedTrackId })
   }
 
-  setFocusedTrackId(trackId: TrackId) {
+  setFocusedTrackId(trackId) {
     let index = trackIds.indexOf(trackId)
     const focusedTrackId = trackIds[index]
     this.setState({ focusedTrackId })
   }
 
-  shiftFocusedTrackMilestoneByDelta(delta: number) {
+  shiftFocusedTrackMilestoneByDelta(delta) {
     let prevMilestone = this.state.milestoneByTrack[this.state.focusedTrackId]
     let milestone = prevMilestone + delta
     if (milestone < 0) milestone = 0
     if (milestone > 5) milestone = 5
-    this.handleTrackMilestoneChange(this.state.focusedTrackId, ((milestone: any): Milestone))
+    this.handleTrackMilestoneChange(this.state.focusedTrackId, ((milestone)))
   }
 
-  setTitle(title: string) {
+  setTitle(title) {
     let titles = eligibleTitles(this.state.milestoneByTrack)
     title = titles.indexOf(title) == -1 ? titles[0] : title
     this.setState({ title })

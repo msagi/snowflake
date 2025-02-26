@@ -1,33 +1,34 @@
 // @flow
 import * as d3 from 'd3'
 
-export type TrackId = 'MOBILE' | 'WEB_CLIENT' | 'FOUNDATIONS' | 'SERVERS' |
+export const TrackId = 'MOBILE' | 'WEB_CLIENT' | 'FOUNDATIONS' | 'SERVERS' |
   'PROJECT_MANAGEMENT' | 'COMMUNICATION' | 'CRAFT' | 'INITIATIVE' |
   'CAREER_DEVELOPMENT' | 'ORG_DESIGN' | 'WELLBEING' | 'ACCOMPLISHMENT' |
   'MENTORSHIP' | 'EVANGELISM' | 'RECRUITING' | 'COMMUNITY'
-export type Milestone = 0 | 1 | 2 | 3 | 4 | 5
+export const Milestone = 0 | 1 | 2 | 3 | 4 | 5
 
-export type MilestoneMap = {
-  'MOBILE': Milestone,
-  'WEB_CLIENT': Milestone,
-  'FOUNDATIONS': Milestone,
-  'SERVERS': Milestone,
-  'PROJECT_MANAGEMENT': Milestone,
-  'COMMUNICATION': Milestone,
-  'CRAFT': Milestone,
-  'INITIATIVE': Milestone,
-  'CAREER_DEVELOPMENT': Milestone,
-  'ORG_DESIGN': Milestone,
-  'WELLBEING': Milestone,
-  'ACCOMPLISHMENT': Milestone,
-  'MENTORSHIP': Milestone,
-  'EVANGELISM': Milestone,
-  'RECRUITING': Milestone,
-  'COMMUNITY': Milestone
-}
+export const MilestoneMap = {
+  MOBILE: 0,
+  WEB_CLIENT: 1,
+  FOUNDATIONS: 2,
+  SERVERS: 3,
+  PROJECT_MANAGEMENT: 4,
+  COMMUNICATION: 5,
+  CRAFT: 6,
+  INITIATIVE: 7,
+  CAREER_DEVELOPMENT: 8,
+  ORG_DESIGN: 9,
+  WELLBEING: 10,
+  ACCOMPLISHMENT: 11,
+  MENTORSHIP: 12,
+  EVANGELISM: 13,
+  RECRUITING: 14,
+  COMMUNITY: 15
+};
+
 export const milestones = [0, 1, 2, 3, 4, 5]
 
-export const milestoneToPoints = (milestone: Milestone): number => {
+export const milestoneToPoints = (milestone) => {
   switch (milestone) {
     case 0: return 0
     case 1: return 1
@@ -59,37 +60,39 @@ export const pointsToLevels = {
 
 export const maxLevel = 135
 
-export type Track = {
-  displayName: string,
-  category: string, // TK categoryId type?
-  description: string,
-  milestones: {
-    summary: string,
-    signals: string[],
-    examples: string[]
-  }[]
-}
+export const Track = {
+  displayName: "",
+  category: "", // TK categoryId type?
+  description: "",
+  milestones: [
+    {
+      summary: "",
+      signals: [],
+      examples: []
+    }
+  ]
+};
 
-type Tracks = {|
-  'MOBILE': Track,
-  'WEB_CLIENT': Track,
-  'FOUNDATIONS': Track,
-  'SERVERS': Track,
-  'PROJECT_MANAGEMENT': Track,
-  'COMMUNICATION': Track,
-  'CRAFT': Track,
-  'INITIATIVE': Track,
-  'CAREER_DEVELOPMENT': Track,
-  'ORG_DESIGN': Track,
-  'WELLBEING': Track,
-  'ACCOMPLISHMENT': Track,
-  'MENTORSHIP': Track,
-  'EVANGELISM': Track,
-  'RECRUITING': Track,
-  'COMMUNITY': Track
-|}
+export const Tracks = {
+  MOBILE: {},
+  WEB_CLIENT: {},
+  FOUNDATIONS: {},
+  SERVERS: {},
+  PROJECT_MANAGEMENT: {},
+  COMMUNICATION: {},
+  CRAFT: {},
+  INITIATIVE: {},
+  CAREER_DEVELOPMENT: {},
+  ORG_DESIGN: {},
+  WELLBEING: {},
+  ACCOMPLISHMENT: {},
+  MENTORSHIP: {},
+  EVANGELISM: {},
+  RECRUITING: {},
+  COMMUNITY: {}
+};
 
-export const tracks: Tracks = {
+export const tracks = {
   "MOBILE": {
     "displayName": "Mobile",
     "category": "A",
@@ -1163,14 +1166,14 @@ export const tracks: Tracks = {
   },
 }
 
-export const trackIds: TrackId[] = Object.keys(tracks)
+export const trackIds = Object.keys(tracks)
 
-export const categoryIds: Set<string> = trackIds.reduce((set, trackId) => {
+export const categoryIds = trackIds.reduce((set, trackId) => {
   set.add(tracks[trackId].category)
   return set
 }, new Set())
 
-export const categoryPointsFromMilestoneMap = (milestoneMap: MilestoneMap) => {
+export const categoryPointsFromMilestoneMap = (milestoneMap) => {
   let pointsByCategory = new Map()
   trackIds.forEach((trackId) => {
     const milestone = milestoneMap[trackId]
@@ -1184,7 +1187,7 @@ export const categoryPointsFromMilestoneMap = (milestoneMap: MilestoneMap) => {
   })
 }
 
-export const totalPointsFromMilestoneMap = (milestoneMap: MilestoneMap): number =>
+export const totalPointsFromMilestoneMap = (milestoneMap) =>
   trackIds.map(trackId => milestoneToPoints(milestoneMap[trackId]))
     .reduce((sum, addend) => (sum + addend), 0)
 
@@ -1203,7 +1206,7 @@ export const titles = [
   {label: 'Director of Engineering', minPoints: 90}
 ]
 
-export const eligibleTitles = (milestoneMap: MilestoneMap): string[] => {
+export const eligibleTitles = (milestoneMap) => {
   const totalPoints = totalPointsFromMilestoneMap(milestoneMap)
 
   return titles.filter(title => (title.minPoints === undefined || totalPoints >= title.minPoints)

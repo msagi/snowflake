@@ -1,30 +1,24 @@
-// @flow
-
 import { pointsToLevels, milestoneToPoints, trackIds, totalPointsFromMilestoneMap } from '../constants'
-import type { MilestoneMap } from '../constants'
 import React from 'react'
 
-type Props = {
-  milestoneByTrack: MilestoneMap
-}
-
-class PointSummaries extends React.Component<Props> {
+class PointSummaries extends React.Component {
   render() {
-    const totalPoints = totalPointsFromMilestoneMap(this.props.milestoneByTrack)
+    const { milestoneByTrack } = this.props;
+    const totalPoints = totalPointsFromMilestoneMap(milestoneByTrack);
 
-    let currentLevel, nextLevel
+    let currentLevel, nextLevel;
 
-    let pointsForCurrentLevel = totalPoints
+    let pointsForCurrentLevel = totalPoints;
     while (!(currentLevel = pointsToLevels[pointsForCurrentLevel])) {
-      pointsForCurrentLevel--
+      pointsForCurrentLevel--;
     }
 
-    let pointsToNextLevel = 1
+    let pointsToNextLevel = 1;
     while (!(nextLevel = pointsToLevels[totalPoints + pointsToNextLevel])) {
-      pointsToNextLevel++
+      pointsToNextLevel++;
       if (pointsToNextLevel > 135) {
-        pointsToNextLevel = 'N/A'
-        break
+        pointsToNextLevel = 'N/A';
+        break;
       }
     }
 
@@ -41,7 +35,7 @@ class PointSummaries extends React.Component<Props> {
         label: 'Points to next level',
         value: pointsToNextLevel
       }
-    ]
+    ];
 
     return (
       <table>
@@ -69,23 +63,23 @@ class PointSummaries extends React.Component<Props> {
         `}</style>
         <tbody>
           <tr>
-          {blocks.map(({label}, i) => (
-            <th key={i} className="point-summary-label">
-              {label}
-            </th>
-          ))}
+            {blocks.map(({ label }, i) => (
+              <th key={i} className="point-summary-label">
+                {label}
+              </th>
+            ))}
           </tr>
           <tr>
-          {blocks.map(({value}, i) => (
-            <td key={i} className="point-summary-value">
-              {value}
-            </td>
-          ))}
+            {blocks.map(({ value }, i) => (
+              <td key={i} className="point-summary-value">
+                {value}
+              </td>
+            ))}
           </tr>
         </tbody>
       </table>
-    )
+    );
   }
 }
 
-export default PointSummaries
+export default PointSummaries;
