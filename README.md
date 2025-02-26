@@ -1,3 +1,13 @@
+## This is a Fork
+This project was implemented by Medium, for career management of its engineers. However, it was discontinued a few years ago.
+
+For this reason, many things stopped working with more modern versions of NodeJS.
+
+To address this, the following changes were implemented:
+- Removal of `flow` (Used for static typing directly in JS, but has been discontinued)
+- WebPack update
+- Babel removal
+
 ## ⚠️ Heads up: Medium isn’t using this tool anymore, but you’re welcome to!
 [Read more about our current thinking around engineer growth](https://medium.engineering/engineering-growth-at-medium-4935b3234d25).
 
