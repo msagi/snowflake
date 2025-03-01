@@ -1,44 +1,47 @@
-// @flow
+import React from "react";
 
-import React from 'react'
-
-type Props = {
-  increaseFocusedMilestoneFn: () => void,
-  selectNextTrackFn: () => void,
-  decreaseFocusedMilestoneFn: () => void,
-  selectPrevTrackFn: () => void
-}
-
-class KeyboardListener extends React.Component<Props> {
+class KeyboardListener extends React.Component {
   componentDidMount() {
-    window.addEventListener('keydown', (e) => this.handleKeyDown(e)) // TK unlisten
+    window.addEventListener("keydown", this.handleKeyDown);
   }
 
-  handleKeyDown(e: KeyboardEvent) {
-    switch(e.code) {
-      case 'ArrowUp':
-        this.props.increaseFocusedMilestoneFn()
-        e.preventDefault()
-        break
-      case 'ArrowRight':
-        this.props.selectNextTrackFn()
-        e.preventDefault()
-        break
-      case 'ArrowDown':
-        this.props.decreaseFocusedMilestoneFn()
-        e.preventDefault()
-        break
-      case 'ArrowLeft':
-        this.props.selectPrevTrackFn()
-        e.preventDefault()
-        break
-    }
+  componentWillUnmount() {
+    window.removeEventListener("keydown", this.handleKeyDown);
   }
+
+  handleKeyDown = (e) => {
+    const {
+      increaseFocusedMilestoneFn,
+      selectNextTrackFn,
+      decreaseFocusedMilestoneFn,
+      selectPrevTrackFn,
+    } = this.props; // Pegando as funções corretamente das props
+
+    switch (e.code) {
+      case "ArrowUp":
+        increaseFocusedMilestoneFn();
+        e.preventDefault();
+        break;
+      case "ArrowRight":
+        selectNextTrackFn();
+        e.preventDefault();
+        break;
+      case "ArrowDown":
+        decreaseFocusedMilestoneFn();
+        e.preventDefault();
+        break;
+      case "ArrowLeft":
+        selectPrevTrackFn();
+        e.preventDefault();
+        break;
+      default:
+        break;
+    }
+  };
 
   render() {
-    return null
+    return null;
   }
-
 }
 
-export default KeyboardListener
+export default KeyboardListener;
